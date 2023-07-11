@@ -4,7 +4,9 @@
         "source": "/api/:path*",
         "destination": "https://api.dify.ai/v1/:path*",
         "headers": {
-          "Host": "api.dify.ai"
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE",
+          "Access-Control-Allow-Headers": "Content-Type"
         }
       }
     ]
