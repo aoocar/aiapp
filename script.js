@@ -12,7 +12,7 @@ async function sendMessage(query, conversationId, user) {
     body: JSON.stringify({
       inputs: {},
       query: query,
-      response_mode: 'streaming',
+      response_mode: 'blocking',
       conversation_id: conversationId,
       user: user
     })
