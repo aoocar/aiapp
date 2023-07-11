@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/:path*",
+        "destination": "https://api.dify.ai/v1/:path*",
+        "headers": {
+          "Host": "api.dify.ai"
+        }
+      }
+    ]
+  }
+  
