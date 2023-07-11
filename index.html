@@ -1,74 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dify.ai API调用示例</title>
+  <title>API Demo</title>
 </head>
 <body>
-  <h1>Dify.ai API调用示例</h1>
+  <h1>API Demo</h1>
+  <div id="chatContainer"></div>
 
-  <div>
-    <label for="query">用户输入:</label>
-    <input type="text" id="query" name="query" />
-    <button onclick="sendChatMessage()">发送</button>
-  </div>
-
-  <div id="responseContainer">
-    <h2>回复:</h2>
-    <ul id="responseList"></ul>
-  </div>
-
-  <script>
-    function sendChatMessage() {
-      const query = document.getElementById("query").value;
-      const conversationId = "1c7e55fb-1ba2-4e10-81b5-30addcea2276";
-      const user = "abc-123";
-      const apiUrl = "https://api.dify.dev/v1/chat-messages";
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer ENTER-YOUR-SECRET-KEY",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          inputs: {},
-          query: query,
-          response_mode: "streaming",
-          conversation_id: conversationId,
-          user: user
-        })
-      };
-
-      fetch(apiUrl, requestOptions)
-        .then(response => response.body)
-        .then(stream => {
-          const reader = stream.getReader();
-
-          function readStream() {
-            reader.read().then(({ done, value }) => {
-              if (done) {
-                console.log("Stream finished.");
-                return;
-              }
-
-              const responseData = JSON.parse(new TextDecoder("utf-8").decode(value));
-              const answer = responseData.answer;
-
-              const responseList = document.getElementById("responseList");
-              const listItem = document.createElement("li");
-              listItem.textContent = answer;
-              responseList.appendChild(listItem);
-
-              readStream();
-            });
-          }
-
-          readStream();
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
