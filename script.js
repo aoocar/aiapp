@@ -6,7 +6,7 @@ async function sendMessage(query, conversationId, user) {
   const requestOptions = {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ENTER-YOUR-SECRET-KEY',
+      'Authorization': 'Bearer app-zWoAxLPaBgKT8djav0EB6Gm9',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
