@@ -39,7 +39,7 @@ async function sendMessage() {
 }
 
 function addMessageToConversation(query, answer) {
-  const message = document.createElement('p');
+  const message = document.createElement('div');
   message.innerHTML = `<strong>你:</strong> ${query}<br><strong>AI:</strong> ${answer}`;
   conversationDiv.appendChild(message);
   inputText.value = '';
