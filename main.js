@@ -1,55 +1,37 @@
-// 获取表单元素和对话输出元素
-const chatForm = document.getElementById('chat-form');
-const userInput = document.getElementById('user-input');
-const chatOutput = document.getElementById('chat-output');
+// 获取 chat-container 元素
+const chatContainer = document.getElementById('chat-container');
 
-// 定义 API 请求的基本信息
-const apiUrl = 'https://api.dify.ai/v1/chat-messages';
-const secretKey = 'app-zWoAxLPaBgKT8djav0EB6Gm9';
-let conversationId = null;
+// 定义调用 API 的函数
+async function callAPI() {
+  const apiUrl = 'https://api.dify.ai/v1/chat-messages';
+  const apiKey = 'app-zWoAxLPaBgKT8djav0EB6Gm9';
 
-// 处理表单提交事件
-chatForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const userMessage = userInput.value.trim();
-  if (userMessage !== '') {
-    sendMessage(userMessage);
-    userInput.value = '';
-  }
-});
-
-// 发送消息到 API
-function sendMessage(message) {
-  const data = {
+  const requestBody = {
     inputs: {},
-    query: message,
+    query: 'eh',
     response_mode: 'streaming',
-    conversation_id: conversationId,
+    conversation_id: '1c7e55fb-1ba2-4e10-81b5-30addcea2276',
     user: 'abc-123'
   };
 
-  fetch('/api/chat-messages', {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${secretKey}`,
+      'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
-  })
-  
-    .then(response => response.json())
-    .then(data => handleApiResponse(data))
-    .catch(error => console.error(error));
+    body: JSON.stringify(requestBody)
+  });
+
+  const responseData = await response.json();
+
+  // 处理 API 响应的逻辑
+  // 在 chat-container 中显示回答
+  const answer = responseData.answer;
+  const answerElement = document.createElement('p');
+  answerElement.textContent = answer;
+  chatContainer.appendChild(answerElement);
 }
 
-// 处理 API 响应
-function handleApiResponse(responseData) {
-  if (responseData.conversation_id) {
-    conversationId = responseData.conversation_id;
-  }
-
-  const message = responseData.message || '';
-
-  // 将对话结果添加到输出元素中
-  chatOutput.innerHTML += `<p>${message}</p>`;
-}
+// 调用 API
+callAPI();
