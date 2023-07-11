@@ -28,7 +28,7 @@ function sendMessage(message) {
     user: 'abc-123'
   };
 
-  fetch(apiUrl, {
+  fetch('/api/chat-messages', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${secretKey}`,
@@ -36,6 +36,7 @@ function sendMessage(message) {
     },
     body: JSON.stringify(data)
   })
+  
     .then(response => response.json())
     .then(data => handleApiResponse(data))
     .catch(error => console.error(error));
