@@ -19,6 +19,8 @@
   import api from '../api'
   
   export default {
+    name: 'ChatComponent',
+
     data() {
       return {
         messages: [],
