@@ -18,114 +18,67 @@
 <!-- 点击加载更多 -->
 <button @click="loadMore">更多</button>
 
-<!-- 发送反馈 -->
-<span @click="sendFeedback('xxx', 'like')">
-  赞 {{feedbackCount}}
+
+<!-- 判断不为空才显示 -->
+<div v-if="params">
+  {{ params }}
+</div>
+
+<!-- 使用 data 中定义的变量 -->
+<span @click="sendFeedback">
+  赞{{ feedbackCount }} 
 </span>
 
 </template>
   <script> 
-  // 获取参数的方法 getParams 没有定义,需要先导入 api.js 并调用:
+// 引入api
+import api from './api'
 
-import api from './api.js'
-
-// ...
-
-mounted() {
-  api.getParams().then(...)
-}
+export default {
 
   data() {
-  return {
-    messages: [],
-    inputMsg: ''
-  }
-}
-// mounted 中调用获取参数
-mounted() {
-  this.getParams()
-}
-
-// 发送消息时
-send() {
-  const data = {
-    query: this.inputMsg,
-    // ...其他参数
-  }
-  
-  api.sendMessage(data).then(res => {
-    // 显示返回的消息
-    const msg = { 
-     text: res.answer
+    return {
+      messages: [],
+      inputMsg: '',
+      params: null, 
+      page: 1,
+      feedbackCount: 0
     }
-    this.messages.push(msg)
-  })
-}
+  },
 
-// 加载更多消息 
-loadMore() {
-  this.page++
+  mounted() {
+    // 调用接口获取参数
+    api.getParams().then(res => {
+      this.params = res.data
+    })
+  },
 
-  api.getMessages({
-    page: this.page 
-  }).then(res => {
-    // 追加更多消息
-    this.messages.push(...res.data)
-  })
-}
+  methods: {
 
-// 发送反馈
-sendFeedback(id, type) {
-  api.sendFeedback(id, {
-    rating: type
-  }) 
-}
-data() {
-  return {
-    feedbackCount: 0 
+    send() {
+      // ...发送消息逻辑
+      
+    },
+
+    loadMore() {
+      this.page++ 
+      
+      // 请求接口
+      
+    },
+    
+    sendFeedback(id) {
+      // 定义id变量
+      const id = 'xxx'
+      
+      api.sendFeedback(id).then(() => {
+        // 更新数量
+        this.feedbackCount++  
+      })
+    }
+
   }
-}
-// 获取参数:
-// mounted 中调用 getParams 获取参数,但没有定义变量存储结果
-// 模板直接渲染 {{params}} 但 params 未定义
-data() {
-  return {
-    params: null 
-  }
-}
 
-mounted() {
-  this.getParams().then(res => {
-    this.params = res.data
-  }) 
-}
-// 获取历史消息:
-// 没有定义 page 变量,直接传了 this.page 可能为 undefined
-data() {
-  return {
-    page: 1
-  }
-}
-
-loadMore() {
-  this.page++ 
-  // 请求接口
-}
-
-//发送反馈:
-//没有定义 feedbackCount 变量,模板直接渲染
-//没有处理发送反馈的响应
-data() {
-  return {
-    feedbackCount: 0
-  }
-}
-
-sendFeedback(id) {
-  api.sendFeedback(id).then(res => {
-    // 成功后更新数量
-    this.feedbackCount++
-  })
 }
 
   </script> 
