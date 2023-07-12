@@ -31,3 +31,19 @@ getParams() {
   sendFeedback(id, data) {
     return api.post(`/messages/${id}/feedbacks`, data)
   }
+
+  // api.js 
+
+export default {
+
+    getParams() {
+      return axios.get('/parameters') 
+    },
+  
+    sendMessage(data) {
+      return axios.post('/chat-messages', data)
+    }
+  
+    // 其他接口同理
+  
+  }

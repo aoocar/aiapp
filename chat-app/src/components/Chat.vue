@@ -34,6 +34,25 @@
 // 引入api
 import api from './api'
 
+
+send() {
+  const data = {
+    query: this.inputMsg,
+    // 其他必要的参数
+  };
+
+  api.sendMessage(data).then(res => {
+    // 处理结果  
+    const msg = { ... };
+    this.messages.push(msg);
+  });
+}
+mounted() {
+  api.getParams().then(res => {
+    this.params = res.data;
+  });
+}
+
 export default {
 
   data() {
