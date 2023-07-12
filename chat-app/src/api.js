@@ -16,3 +16,18 @@ export default {
 
   // 其他接口方法
 }
+
+// 获取参数
+getParams() {
+    return api.get('/parameters')
+  }
+  
+  // 获取历史消息  
+  getMessages(params) {
+    return api.get('/messages', {params}) 
+  }
+  
+  // 发送反馈
+  sendFeedback(id, data) {
+    return api.post(`/messages/${id}/feedbacks`, data)
+  }

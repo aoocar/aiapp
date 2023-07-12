@@ -25,6 +25,16 @@
 
 </template>
   <script> 
+  // 获取参数的方法 getParams 没有定义,需要先导入 api.js 并调用:
+
+import api from './api.js'
+
+// ...
+
+mounted() {
+  api.getParams().then(...)
+}
+
   data() {
   return {
     messages: [],
@@ -69,6 +79,11 @@ sendFeedback(id, type) {
   api.sendFeedback(id, {
     rating: type
   }) 
+}
+data() {
+  return {
+    feedbackCount: 0 
+  }
 }
 // 获取参数:
 // mounted 中调用 getParams 获取参数,但没有定义变量存储结果
