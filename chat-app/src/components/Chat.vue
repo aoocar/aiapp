@@ -5,35 +5,71 @@
   </div>
   <input v-model="inputMsg" />
   <button @click="send">发送</button>
+
+  <div v-for="msg in messages">
+  <div :class="msg.from">
+    {{ msg.text }}
+  </div>
+</div>
+
+<!-- 显示参数 -->
+<div>{{params}}</div>
+
+<!-- 点击加载更多 -->
+<button @click="loadMore">更多</button>
+
+<!-- 发送反馈 -->
+<span @click="sendFeedback('xxx', 'like')">
+  赞 {{feedbackCount}}
+</span>
+
 </template>
   <script> 
   data() {
   return {
-    messages: []
+    messages: [],
+    inputMsg: ''
   }
 }
-
-methods: {
-  send() {
-    // 调用 API 获取数据
-    const msg = { /* 新消息对象 */ }
-    
-    // 添加到数组
-    this.messages.push(msg) 
-  }
+// mounted 中调用获取参数
+mounted() {
+  this.getParams()
 }
 
-methods: {
-  async send() {
-    const res = await api.sendMessage(data)
-    
-    // 操作数据
-    if (res.ok) {
-      // 成功则 push 消息  
+// 发送消息时
+send() {
+  const data = {
+    query: this.inputMsg,
+    // ...其他参数
+  }
+  
+  api.sendMessage(data).then(res => {
+    // 显示返回的消息
+    const msg = { 
+     text: res.answer
     }
-  } 
+    this.messages.push(msg)
+  })
 }
 
+// 加载更多消息 
+loadMore() {
+  this.page++
+
+  api.getMessages({
+    page: this.page 
+  }).then(res => {
+    // 追加更多消息
+    this.messages.push(...res.data)
+  })
+}
+
+// 发送反馈
+sendFeedback(id, type) {
+  api.sendFeedback(id, {
+    rating: type
+  }) 
+}
   </script> 
 
 <style> 
