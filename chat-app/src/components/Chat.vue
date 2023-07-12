@@ -40,8 +40,8 @@ export default {
     return {
       messages: [],
       inputMsg: '',
-      params: null, 
-      page: 1,
+      params: null,
+      page: 1, 
       feedbackCount: 0
     }
   },
@@ -56,28 +56,32 @@ export default {
   methods: {
 
     send() {
-      // ...发送消息逻辑
-      
+      // 调用发送消息接口
+      api.sendMessage(data).then(res => {
+        // 处理结果  
+        const msg = {...}
+        this.messages.push(msg)
+      })
     },
 
     loadMore() {
-      this.page++ 
+      this.page++
       
-      // 请求接口
-      
+      // 调用加载更多接口
+      api.getMessages().then(res => {
+        // 处理结果
+        this.messages.push(...res.data)  
+      })
     },
     
     sendFeedback(id) {
-      // 定义id变量
-      const id = 'xxx'
-      
+      // 调用发送反馈接口
       api.sendFeedback(id).then(() => {
-        // 更新数量
-        this.feedbackCount++  
+        this.feedbackCount++
       })
     }
 
-  }
+  }  
 
 }
 
