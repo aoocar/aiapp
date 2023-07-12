@@ -70,6 +70,49 @@ sendFeedback(id, type) {
     rating: type
   }) 
 }
+// 获取参数:
+// mounted 中调用 getParams 获取参数,但没有定义变量存储结果
+// 模板直接渲染 {{params}} 但 params 未定义
+data() {
+  return {
+    params: null 
+  }
+}
+
+mounted() {
+  this.getParams().then(res => {
+    this.params = res.data
+  }) 
+}
+// 获取历史消息:
+// 没有定义 page 变量,直接传了 this.page 可能为 undefined
+data() {
+  return {
+    page: 1
+  }
+}
+
+loadMore() {
+  this.page++ 
+  // 请求接口
+}
+
+//发送反馈:
+//没有定义 feedbackCount 变量,模板直接渲染
+//没有处理发送反馈的响应
+data() {
+  return {
+    feedbackCount: 0
+  }
+}
+
+sendFeedback(id) {
+  api.sendFeedback(id).then(res => {
+    // 成功后更新数量
+    this.feedbackCount++
+  })
+}
+
   </script> 
 
 <style> 
