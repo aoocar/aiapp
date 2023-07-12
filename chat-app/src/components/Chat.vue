@@ -1,5 +1,18 @@
 <template>
-    <!-- 模板内容 -->
+    <div>
+      <!-- 聊天消息显示区域 -->
+      <div class="chat-messages">
+        <div v-for="msg in messages" :key="msg.id">
+          {{ msg.text }}
+        </div>
+      </div>
+  
+      <!-- 用户输入框和发送按钮 -->
+      <div class="user-input">
+        <input v-model="inputMsg" type="text" placeholder="输入消息">
+        <button @click="send">发送</button>
+      </div>
+    </div>
   </template>
   
   <script>
@@ -10,51 +23,63 @@
       return {
         messages: [],
         inputMsg: '',
-        params: null,
-        page: 1,
-        feedbackCount: 0
+        conversationId: null,
+        user: 'abc-123'
       }
     },
   
     mounted() {
-      api.getParams().then(res => {
-        this.params = res.data
-      })
+      // 创建新的对话并获取会话标识符
+      this.createConversation()
     },
   
     methods: {
+      createConversation() {
+        api.createConversation(this.user).then(res => {
+          this.conversationId = res.data.conversation_id
+          this.fetchMessages()
+        })
+      },
+  
+      fetchMessages() {
+        api.getMessages(this.conversationId).then(res => {
+          this.messages = res.data
+        })
+      },
+  
       send() {
+        if (!this.conversationId) {
+          console.error('会话标识符为空')
+          return
+        }
+  
         const data = {
           query: this.inputMsg,
-          // 其他必要的参数
-        };
+          conversation_id: this.conversationId,
+          user: this.user
+        }
   
         api.sendMessage(data).then(res => {
-          const msg = { ... };
-          this.messages.push(msg);
-        });
-      },
-  
-      loadMore() {
-        this.page++;
-  
-        api.getMessages().then(res => {
-          this.messages.push(...res.data);
-        });
-      },
-  
-      sendFeedback(id) {
-        api.sendFeedback(id).then(() => {
-          this.feedbackCount++;
-        });
-      },
-  
-      // 其他方法定义
+          const msg = {
+            id: res.data.id,
+            text: res.data.answer
+          }
+          this.messages.push(msg)
+          this.inputMsg = ''
+        })
+      }
     }
   }
   </script>
   
   <style>
   /* 样式定义 */
+  .chat-messages {
+    /* 聊天消息显示区域的样式 */
+  }
+  
+  .user-input {
+    /* 用户输入框和发送按钮的样式 */
+  }
   </style>
   
