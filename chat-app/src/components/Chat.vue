@@ -9,15 +9,28 @@
   <script> 
   data() {
   return {
-    messages: [],
-    inputMsg: '' 
+    messages: []
   }
 }
 
 methods: {
   send() {
-    // 调用 API 发送消息
-    // 将新消息对象 push 到 messages 数组
+    // 调用 API 获取数据
+    const msg = { /* 新消息对象 */ }
+    
+    // 添加到数组
+    this.messages.push(msg) 
+  }
+}
+
+methods: {
+  async send() {
+    const res = await api.sendMessage(data)
+    
+    // 操作数据
+    if (res.ok) {
+      // 成功则 push 消息  
+    }
   } 
 }
 
